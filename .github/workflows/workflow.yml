@@ -22,3 +22,9 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          # Artifact name
+          name: buildresult #.zip will be added automatically
+          path: /home/runner/work/testing/testing/ClassLibrary/bin/Release/net462/*.*
