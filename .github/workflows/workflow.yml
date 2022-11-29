@@ -41,7 +41,6 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar-scanner
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
         run: |
           dotnet tool install --global dotnet-sonarscanner
       - name: Build and analyze
