@@ -1,11 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClassLibrary;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ClassLibrary.Tests
+﻿namespace ClassLibrary.Tests
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 	[TestClass()]
 	public class UtilityTests
 	{
