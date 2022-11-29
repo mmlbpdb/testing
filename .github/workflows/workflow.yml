@@ -44,16 +44,22 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
       - name: Install Dotnet coverage
-        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
+        run: dotnet tool install --global dotnet-coverage
+      #- name: Install Dotnet coverage
+      #  run: dotnet tool install --global JetBrains.dotCover.GlobalTool
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet sonarscanner begin /k:"mmlbpdb_testing" /o:"testorg561" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html /d:sonar.log.level=Debug
+          dotnet sonarscanner begin /k:"mmlbpdb_testing" /o:"testorg561" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.log.level=Debug
           dotnet build --configuration Release
-          dotnet dotcover test --dcReportType=HTML
+          dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        # dotnet sonarscanner begin /k:"mmlbpdb_testing" /o:"testorg561" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html /d:sonar.log.level=Debug
+        # dotnet build --configuration Release
+        # dotnet dotcover test --dcReportType=HTML
+        # dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       - name: readDir2
         run: ls -lR 
       - name: Upload a Build Artifact
@@ -61,5 +67,5 @@ jobs:
         with:
           # Artifact name
           name: buildresult #.zip will be added automatically
-          path: dotCover.Output.html
+          path: coverage.xml
           #path: /home/runner/work/testing/testing/ClassLibrary/bin/Release/net462/*.*
